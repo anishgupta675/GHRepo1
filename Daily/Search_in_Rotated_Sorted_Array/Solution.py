@@ -1,5 +1,5 @@
 class Solution:
-    def search(self, nums: List[int], low: int, high: int, target: int) -> int:
+    def search(self, nums: list[int], low: int, high: int, target: int) -> int:
         if low > high:
             return -1
         mid = (low + mid) >> 1
@@ -12,5 +12,5 @@ class Solution:
         elif target >= nums[mid] and target <= nums[high]:
             return self.search(nums, mid + 1, high, target)
         return self.search(nums, low, mid - 1, target)
-    def search(self, nums: List[int], target: int) -> int:
+    def search(self, nums: list[int], target: int) -> int:
         return self.search(nums, 0, len(nums) - 1, target)
