@@ -3,14 +3,13 @@
 using namespace std;
 
 struct comp {
-    constexpr bool operator() {
-        pair<int, int> const &a,
-        pair<int, int> const &b)
-        const noexcept {
-            if(a.first > b.first) return true;
-            if(a.first < b.first) return false;
-            return a.second > b.second;
-        }
+    constexpr bool operator() (
+    pair<int, int> const &a,
+    pair<int, int> const &b)
+    const noexcept {
+        if(a.first > b.first) return true;
+        if(a.first < b.first) return false;
+        return a.second > b.second;
     }
 };
 
