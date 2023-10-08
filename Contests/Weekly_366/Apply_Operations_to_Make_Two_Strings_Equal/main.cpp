@@ -4,41 +4,40 @@ using namespace std;
 
 class Solution {
 public:
-    int mod=1000000007;
-    long long minOperations(vector<int>& arr, int n, int k)
-    {
-        long long ans = 0;
-        int barr[31];
-        for(int i=0;i<31;i++)barr[i]=0;
-        for (int i=0;i<n;i++) {
-            int x=arr[i];
-            int j = 0;
-
-            while (x) {
-                if (x & 1)
-                    barr[j]++;
-                x >>= 1;
-                j++;
+    int minOperations(string s1, string s2, int x) {
+        int res = 0, cntZeroes = 0, hamDist = 0, unpaired = -1, cur_unpaired = -1;
+        vector<int> parity;
+        vector<bool> vis(s1.length());
+        priority_queue<pair<int, pair<int, int>>> pq;
+        for(int i = 0; i < s1.length(); i++) {
+            if(!s1[i]) cntZeroes++;
+            if(!s2[i]) cntZeroes--;
+            if(s1[i] != s2[i]) {
+                hamDist++;
+                parity.push_back(i);
+                cout << "Parity Bit: " << i << endl;
             }
         }
-        
-        for (int i = 0; i < k; i++) {
-            long long sum = 0;
-            for (int j = 0; j < 30; ++j) {
-                if (barr[j] > 0) {
-                    sum =(sum+ (long)pow(2, j));
-                    barr[j]--;
-                }
+        if((cntZeroes % 2) || (hamDist % 2)) return -1;
+        for(int i = 1; i < parity.size(); i++) pq.push({parity[i] - parity[i - 1], {i - 1, i}});
+        while(!pq.empty()) {
+            pair<int, pair<int, int>> cur = pq.top();
+            pq.pop();
+            if(vis[cur.second.first] || vis[cur.second.second]) {
+                if(unpaired) {
+                    cur_unpaired = (vis[cur.second.first]) ? cur.second.second : cur.second.first;
+                    res+= min(x, cur_unpaired - unpaired);
+                    vis[cur_unpaired] = 1;
+                    vis[unpaired] = 1;
+                } else unpaired = (vis[cur.second.first]) ? cur.second.second : cur.second.first;
+            } else {
+                res+= min(cur.first, x);
+                vis[cur.second.first] = 1;
+                vis[cur.second.second] = 1;
             }
-
-            long long y=(sum%mod * sum%mod)%mod;
-            ans=(ans%mod+y%mod)%mod;
         }
-        return ans%mod;
-
-    }
-    int maxSum(vector<int>& nums, int k) {
-        return minOperations(nums,nums.size(),k);
+        cout << "Final Result: " << res << endl;
+        return res;
     }
 };
 
